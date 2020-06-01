@@ -16,10 +16,13 @@ namespace LogCenter.Business
         {
             mongoData.InsertOneAsync(logModel.ToBsonDocument());
         }
-        public IEnumerable<BsonDocument> GetPageList(ref long count, string from, int? type, string userId, Dictionary<string, string> sorts = null, int pageIndex = 1, int pageSize = 10)
+        public IEnumerable<BsonDocument> GetPageList(ref long count, string from, string userId, Dictionary<string, string> sorts = null, int pageIndex = 1, int pageSize = 10)
         {
-            return mongoData.GetPageList(ref count, from, type, userId, sorts, pageIndex, pageSize);
-            //return result.Select(s => { s["CreateTime"] = s["CreateTime"].ToUniversalTime().ToString("yyyy-MM-dd hh:mm:ss"); return s.AsBsonDocument; });
+            return mongoData.GetPageList(ref count, from, userId, sorts, pageIndex, pageSize);
+        }
+        public IEnumerable<BsonDocument> OpRecordDay(DateTime createTime)
+        {
+            return mongoData.OpRecordDay(createTime).Select(s => { s["date"] = s["_id"]; s.Remove("_id"); return s; });
         }
     }
 }

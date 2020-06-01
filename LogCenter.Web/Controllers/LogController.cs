@@ -20,11 +20,22 @@ namespace LogCenter.Web.Controllers
             msQueue.SendMessage(logModel, "log");
             return new ResponseModel<string>(ErrorCode.success, "");
         }
-        public ActionResult GetList(string from = null, int? type = null, string userId = null, Dictionary<string, string> sorts = null, int pageIndex = 1, int pageSize = 10)
+        [HttpPost]
+        public ActionResult GetList(LogListModel logModel)
         {
             long count = 0;
-            var result = log.GetPageList(ref count, from, type, userId, sorts, pageIndex, pageSize).ToJson().ReplaceJsonString();
+            var result = log.GetPageList(ref count, logModel.From, logModel.UserId, logModel.Sorts, logModel.PageIndex, logModel.PageSize).ToJson().ReplaceJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
+        }
+        /// <summary>
+        /// 最近几天操作记录
+        /// </summary>
+        /// <param name="last"></param>
+        /// <returns></returns>
+        public ActionResult RecordByDay(int last = 30)
+        {
+            var result = log.OpRecordDay(DateTime.Now.AddDays(-last)).ToJson();
+            return new ResponseModel<string>(ErrorCode.success, result);
         }
     }
 
