@@ -1,4 +1,5 @@
-﻿using SSO.Util.Client;
+﻿using MongoDB.Bson;
+using SSO.Util.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace LogCenter.Business
         {
             try
             {
-                new Log().InsertOneAsync(logModel);
+                new Log().InsertOneAsync(logModel.ToBsonDocument());
             }
             catch (Exception ex)
             {

@@ -54,8 +54,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SSO.Util.Client, Version=1.3.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SSO.Util.Client.1.3.4\lib\net45\SSO.Util.Client.dll</HintPath>
+    <Reference Include="SSO.Util.Client, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSO.Util.Client.1.4.1\lib\net45\SSO.Util.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -91,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Processor.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -125,6 +126,10 @@
     <ProjectReference Include="..\LogCenter.Business\LogCenter.Business.csproj">
       <Project>{F9DBDD18-1563-4A76-B747-307EDBED94E2}</Project>
       <Name>LogCenter.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogCenter.Data\LogCenter.Data.csproj">
+      <Project>{119C7C25-0F58-42DD-BEFF-EC2449973C32}</Project>
+      <Name>LogCenter.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\LogCenter.Model\LogCenter.Model.csproj">
       <Project>{EB356454-1C36-4544-8E17-A03438D443FC}</Project>

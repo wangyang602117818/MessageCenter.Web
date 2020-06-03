@@ -20,11 +20,17 @@ namespace LogCenter.Web.Controllers
             msQueue.SendMessage(logModel, "log");
             return new ResponseModel<string>(ErrorCode.success, "");
         }
+        [OutputCache(Duration = 60 * 60 * 4)]
+        public ActionResult GetFromList()
+        {
+            var result = log.GetFromList().ToJson();
+            return new ResponseModel<string>(ErrorCode.success, result);
+        }
         [HttpPost]
         public ActionResult GetList(LogListModel logModel)
         {
             long count = 0;
-            var result = log.GetPageList(ref count, logModel.From, logModel.UserId, logModel.Sorts, logModel.PageIndex, logModel.PageSize).ToJson().ReplaceJsonString();
+            var result = log.GetPageList(ref count, logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.Sorts, logModel.PageIndex, logModel.PageSize).ToJson().ReplaceJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
         }
         /// <summary>

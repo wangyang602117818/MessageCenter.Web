@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Log.cs" />
     <Compile Include="ModelBase.cs" />
-    <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

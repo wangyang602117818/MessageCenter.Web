@@ -12,13 +12,13 @@ namespace LogCenter.Business
     public class Log : ModelBase<Data.Log>
     {
         public Log() : base(new Data.Log()) { }
-        public void InsertOneAsync(LogModel logModel)
+        public IEnumerable<BsonDocument> GetFromList()
         {
-            mongoData.InsertOneAsync(logModel.ToBsonDocument());
+            return mongoData.GetFromList().Select(s => { s["from"] = s["_id"]; s.Remove("_id"); return s; });
         }
-        public IEnumerable<BsonDocument> GetPageList(ref long count, string from, string userId, Dictionary<string, string> sorts = null, int pageIndex = 1, int pageSize = 10)
+        public IEnumerable<BsonDocument> GetPageList(ref long count, string from, string controller, string action = null, DateTime? startTime = null, DateTime? endTime = null, string userId = null, Dictionary<string, string> sorts = null, int pageIndex = 1, int pageSize = 10)
         {
-            return mongoData.GetPageList(ref count, from, userId, sorts, pageIndex, pageSize);
+            return mongoData.GetPageList(ref count, from, controller, action, startTime, endTime, userId, sorts, pageIndex, pageSize);
         }
         public IEnumerable<BsonDocument> OpRecordDay(DateTime createTime)
         {
