@@ -57,7 +57,7 @@
       <Version>2.10.4</Version>
     </PackageReference>
     <PackageReference Include="SSO.Util.Client">
-      <Version>1.4.1</Version>
+      <Version>1.4.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

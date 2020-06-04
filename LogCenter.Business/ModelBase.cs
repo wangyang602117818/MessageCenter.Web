@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace LogCenter.Business
     {
         [BsonIgnore]
         protected T mongoData;
+        protected FilterDefinitionBuilder<BsonDocument> FilterBuilder = Builders<BsonDocument>.Filter;
         public ModelBase(T mongoData)
         {
             this.mongoData = mongoData;
@@ -51,6 +53,10 @@ namespace LogCenter.Business
         public BsonDocument FindOne(ObjectId id)
         {
             return mongoData.FindOne(id);
+        }
+        public IEnumerable<BsonDocument> GetPageList(FilterDefinition<BsonDocument> eqs, IEnumerable<string> excludeFields, IEnumerable<string> includeFields, Dictionary<string, string> sorts, int pageIndex, int pageSize, ref long count)
+        {
+            return mongoData.GetPageList(eqs, excludeFields, includeFields, sorts, pageIndex, pageSize, ref count);
         }
     }
 }

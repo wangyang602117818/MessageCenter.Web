@@ -1,6 +1,7 @@
 ﻿using LogCenter.Business;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
+using MongoDB.Driver;
 using SSO.Util.Client;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,23 @@ namespace LogCenter.Web.Controllers
         public ActionResult GetList(LogListModel logModel)
         {
             long count = 0;
-            var result = log.GetPageList(ref count, logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.Sorts, logModel.PageIndex, logModel.PageSize).ToJson().ReplaceJsonString();
+            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName);
+            var result = log.GetPageList(filter, null, null, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson().ReplaceJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
+        }
+        [HttpPost]
+        public ActionResult GetListSimple(LogListModel logModel)
+        {
+            long count = 0;
+            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName);
+            var includeFields = new List<string>() { "Controller", "Action", "CreateTime", "UserName" };
+            var result = log.GetPageList(filter, null, includeFields, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson().ReplaceJsonString();
+            return new ResponseModel<string>(ErrorCode.success, result, count);
+        }
+        public ActionResult GetById(string id)
+        {
+            var result = log.FindOne(ObjectId.Parse(id)).ToJson().ReplaceJsonString();
+            return new ResponseModel<string>(ErrorCode.success, result);
         }
         /// <summary>
         /// 最近几天操作记录
