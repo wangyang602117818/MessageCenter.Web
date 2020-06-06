@@ -24,7 +24,19 @@ namespace LogCenter.Web.Controllers
         [OutputCache(Duration = 60 * 60 * 4)]
         public ActionResult GetFromList()
         {
-            var result = log.GetFromList().ToJson();
+            var result = log.GetFromList().ToJson().ReplaceHttpPrefix();
+            return new ResponseModel<string>(ErrorCode.success, result);
+        }
+        [OutputCache(Duration = 60 * 60 * 4, VaryByParam = "*")]
+        public ActionResult GetControllersByFrom(string from)
+        {
+            var result = log.GetControllersByFrom(from).ToJson();
+            return new ResponseModel<string>(ErrorCode.success, result);
+        }
+        [OutputCache(Duration = 60 * 60 * 4, VaryByParam = "*")]
+        public ActionResult GetActionsByController(string from, string controllerName)
+        {
+            var result = log.GetActionsByController(from, controllerName).ToJson();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
         [HttpPost]
@@ -59,6 +71,7 @@ namespace LogCenter.Web.Controllers
             var result = log.OpRecordDay(DateTime.Now.AddDays(-last)).ToJson();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
+
     }
 
 

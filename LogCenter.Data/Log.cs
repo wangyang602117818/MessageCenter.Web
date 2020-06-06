@@ -36,5 +36,25 @@ namespace LogCenter.Data
                  })
                  .Sort(new BsonDocument("_id", 1)).ToEnumerable();
         }
+        public IEnumerable<BsonDocument> GetControllersByFrom(string from)
+        {
+            return MongoCollection.Aggregate()
+                .Match(FilterBuilder.Eq("From", from))
+                .Group<BsonDocument>(new BsonDocument()
+                {
+                    {"_id","$Controller" },
+                    {"count",new BsonDocument("$sum",1) }
+                }).ToEnumerable();
+        }
+        public IEnumerable<BsonDocument> GetActionsByController(string from, string controller)
+        {
+            return MongoCollection.Aggregate()
+                .Match(FilterBuilder.Eq("From", from) & FilterBuilder.Eq("Controller", controller))
+                .Group<BsonDocument>(new BsonDocument()
+                {
+                    {"_id","$Action" },
+                    {"count",new BsonDocument("$sum",1) }
+                }).ToEnumerable();
+        }
     }
 }

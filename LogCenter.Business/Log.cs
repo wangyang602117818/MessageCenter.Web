@@ -22,8 +22,8 @@ namespace LogCenter.Business
             if (!action.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("Action", new Regex("^" + action + "$", RegexOptions.IgnoreCase)));
             if (startTime != null) list.Add(FilterBuilder.Gte("CreateTime", startTime.Value));
             if (endTime != null) list.Add(FilterBuilder.Lte("CreateTime", endTime.Value.AddDays(1)));
-            if (!userId.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserId", new Regex("^" + userId + "$", RegexOptions.IgnoreCase)));
-            if (!userName.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserName", new Regex("^" + userName + "$", RegexOptions.IgnoreCase)));
+            if (!userId.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserId", new Regex("^" + userId, RegexOptions.IgnoreCase)));
+            if (!userName.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserName", new Regex("^" + userName, RegexOptions.IgnoreCase)));
             if (list.Count > 0) filterBuilder = FilterBuilder.And(list);
             return filterBuilder;
         }
@@ -34,6 +34,14 @@ namespace LogCenter.Business
         public IEnumerable<BsonDocument> OpRecordDay(DateTime createTime)
         {
             return mongoData.OpRecordDay(createTime).Select(s => { s["date"] = s["_id"]; s.Remove("_id"); return s; });
+        }
+        public IEnumerable<BsonDocument> GetControllersByFrom(string from)
+        {
+            return mongoData.GetControllersByFrom(from).Select(s => { s["controller"] = s["_id"]; s.Remove("_id"); return s; });
+        }
+        public IEnumerable<BsonDocument> GetActionsByController(string from, string controller)
+        {
+            return mongoData.GetActionsByController(from, controller).Select(s => { s["action"] = s["_id"]; s.Remove("_id"); return s; });
         }
     }
 }
