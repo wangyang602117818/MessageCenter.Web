@@ -71,7 +71,19 @@ namespace LogCenter.Web.Controllers
             var result = log.OpRecordDay(DateTime.Now.AddDays(-last)).ToJson();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
-
+        public ActionResult GetOperations()
+        {
+            //昨日操作数
+            long lastDay = log.GetCountByDate(DateTime.Now.AddDays(-1).Date, DateTime.Now.Date);
+            //上月操作数
+            var lastMonthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, 1, 0, 0, 0);
+            var lastMonthEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+            long lastMonth = log.GetCountByDate(lastMonthStart, lastMonthEnd);
+            //总操作数
+            long all = log.GetCountByDate(null, null);
+            return new ResponseModel<object>(ErrorCode.success, new { lastDay, lastMonth, all });
+        }
+       
     }
 
 

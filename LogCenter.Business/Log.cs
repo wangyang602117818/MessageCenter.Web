@@ -43,5 +43,9 @@ namespace LogCenter.Business
         {
             return mongoData.GetActionsByController(from, controller).Select(s => { s["action"] = s["_id"]; s.Remove("_id"); return s; });
         }
+        public long GetCountByDate(DateTime? startTime, DateTime? endTime)
+        {
+            return mongoData.GetCountByDate(startTime, endTime);
+        }
     }
 }

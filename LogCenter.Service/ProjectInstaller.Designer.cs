@@ -42,6 +42,8 @@
             this.serviceInstaller1.Description = "同步队列中的消息到数据库";
             this.serviceInstaller1.DisplayName = "LogCenter.Service";
             this.serviceInstaller1.ServiceName = "LogCenter.Service";
+            this.serviceInstaller1.ServicesDependedOn = new string[] {
+        "MSMQ"};
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller

@@ -56,5 +56,18 @@ namespace LogCenter.Data
                     {"count",new BsonDocument("$sum",1) }
                 }).ToEnumerable();
         }
+        public long GetCountByDate(DateTime? startTime, DateTime? endTime)
+        {
+            List<FilterDefinition<BsonDocument>> list = new List<FilterDefinition<BsonDocument>>();
+            if (startTime != null) list.Add(FilterBuilder.Gte("CreateTime", startTime.Value));
+            if (endTime != null) list.Add(FilterBuilder.Lte("CreateTime", endTime.Value.AddDays(1)));
+            if (list.Count == 0) return MongoCollection.EstimatedDocumentCount();
+            return MongoCollection.CountDocuments(FilterBuilder.And(list));
+        }
+        public IEnumerable<BsonDocument> GetLastValuableRecord()
+        {
+
+            return null;
+        }
     }
 }
