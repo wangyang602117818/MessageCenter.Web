@@ -71,6 +71,7 @@ namespace LogCenter.Web.Controllers
             var result = log.OpRecordDay(DateTime.Now.AddDays(-last)).ToJson();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
+        [OutputCache(Duration = 60 * 60, VaryByParam = "*")]
         public ActionResult GetOperations()
         {
             //昨日操作数
