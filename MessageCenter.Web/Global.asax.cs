@@ -18,10 +18,6 @@ namespace MessageCenter.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            var assembly = Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + "bin\\SSO.Util.Client.dll");
-            var stream = assembly.GetManifestResourceStream("SSO.Util.Client.log4net.config");
-            log4net.Config.XmlConfigurator.Configure(stream);
-
             MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("msqueue"));
             msQueue.CreateQueue();
         }
