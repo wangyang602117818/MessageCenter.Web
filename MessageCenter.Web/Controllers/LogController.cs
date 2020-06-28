@@ -43,22 +43,22 @@ namespace MessageCenter.Web.Controllers
         public ActionResult GetList(LogListModel logModel)
         {
             long count = 0;
-            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName);
-            var result = log.GetPageList(filter, null, null, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson().ReplaceJsonString();
+            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
+            var result = log.GetPageList(filter, null, null, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson(new JsonWriterSettings() { OutputMode = JsonOutputMode.Strict }).ReplaceStrictJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
         }
         [HttpPost]
         public ActionResult GetListSimple(LogListModel logModel)
         {
             long count = 0;
-            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName);
-            var includeFields = new List<string>() { "Controller", "Action", "CreateTime", "UserName" };
-            var result = log.GetPageList(filter, null, includeFields, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson().ReplaceJsonString();
+            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
+            var includeFields = new List<string>() { "Controller", "Action", "CreateTime", "UserName", "Time", "Exception" };
+            var result = log.GetPageList(filter, null, includeFields, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson(new JsonWriterSettings() { OutputMode = JsonOutputMode.Strict }).ReplaceStrictJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
         }
         public ActionResult GetById(string id)
         {
-            var result = log.FindOne(ObjectId.Parse(id)).ToJson().ReplaceJsonString();
+            var result = log.FindOne(ObjectId.Parse(id)).ToJson(new JsonWriterSettings() { OutputMode = JsonOutputMode.Strict }).ReplaceStrictJsonString();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
         /// <summary>
@@ -85,7 +85,7 @@ namespace MessageCenter.Web.Controllers
             long all = log.GetCountByDate(null, null);
             return new ResponseModel<object>(ErrorCode.success, new { lastDay, lastMonth, all });
         }
-       
+
     }
 
 

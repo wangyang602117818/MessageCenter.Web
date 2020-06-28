@@ -13,7 +13,7 @@ namespace MessageCenter.Business
     public class Log : ModelBase<Data.Log>
     {
         public Log() : base(new Data.Log()) { }
-        public FilterDefinition<BsonDocument> GetLogFilter(string from, string controller, string action = null, DateTime? startTime = null, DateTime? endTime = null, string userId = null, string userName = null)
+        public FilterDefinition<BsonDocument> GetLogFilter(string from, string controller, string action = null, DateTime? startTime = null, DateTime? endTime = null, string userId = null, string userName = null, bool? exception = null)
         {
             FilterDefinition<BsonDocument> filterBuilder = new BsonDocument();
             List<FilterDefinition<BsonDocument>> list = new List<FilterDefinition<BsonDocument>>();
@@ -24,6 +24,7 @@ namespace MessageCenter.Business
             if (endTime != null) list.Add(FilterBuilder.Lte("CreateTime", endTime.Value.AddDays(1)));
             if (!userId.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserId", new Regex("^" + userId, RegexOptions.IgnoreCase)));
             if (!userName.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserName", new Regex("^" + userName, RegexOptions.IgnoreCase)));
+            if (exception != null) list.Add(FilterBuilder.Eq("Exception", exception.Value));
             if (list.Count > 0) filterBuilder = FilterBuilder.And(list);
             return filterBuilder;
         }
