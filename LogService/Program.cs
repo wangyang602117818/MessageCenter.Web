@@ -16,7 +16,7 @@ namespace LogService
         /// </summary>
         static void Main()
         {
-            MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("msqueue"));
+            MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
             msQueue.CreateQueue();
 
             ServiceBase[] ServicesToRun;

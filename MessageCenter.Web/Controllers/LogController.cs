@@ -14,11 +14,11 @@ namespace MessageCenter.Web.Controllers
 {
     public class LogController : Controller
     {
-        protected MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("msqueue"));
+        protected MsQueue<LogModel> logMsQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
         protected Log log = new Log();
         public ActionResult Insert(LogModel logModel)
         {
-            msQueue.SendMessage(logModel, "log");
+            logMsQueue.SendMessage(logModel, "log");
             return new ResponseModel<string>(ErrorCode.success, "");
         }
         [OutputCache(Duration = 60 * 60 * 4)]

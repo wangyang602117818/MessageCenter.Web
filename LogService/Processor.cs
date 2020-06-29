@@ -17,7 +17,7 @@ namespace LogService
         {
             Task task = Task.Factory.StartNew(() =>
             {
-                MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("msqueue"));
+                MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
                 msQueue.ReceiveMessage(Worker);
             });
             tasks.Add(task);
