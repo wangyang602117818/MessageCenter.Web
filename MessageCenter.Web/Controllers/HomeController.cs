@@ -1,7 +1,10 @@
-﻿using SSO.Util.Client;
+﻿using MessageCenter.Business;
+using SSO.Util.Client;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,7 +16,5 @@ namespace MessageCenter.Web.Controllers
         {
             return Content("index");
         }
-
-      
     }
 }

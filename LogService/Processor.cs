@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LogService
@@ -24,13 +25,15 @@ namespace LogService
         }
         public void Worker(LogModel logModel)
         {
-            try
+            LogModelTimer logModelTimer = new LogModelTimer(logModel);
+            string key = logModelTimer.GetLogKey();
+            if (!LogStorage.Logs.ContainsKey(key))
             {
-                new Log().InsertOneAsync(logModel.ToBsonDocument());
+                bool result = LogStorage.Logs.TryAdd(key, logModelTimer);
             }
-            catch (Exception ex)
+            else
             {
-                Log4Net.ErrorLog(ex);
+                LogStorage.Logs[key].LogModel.CountPerMinute++;
             }
         }
     }

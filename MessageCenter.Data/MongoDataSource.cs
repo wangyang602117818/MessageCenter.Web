@@ -14,6 +14,8 @@ namespace MessageCenter.Data
         static MongoDataSource()
         {
             MongoClient = new MongoClient(AppSettings.GetValue("mongodb"));
+            //IMongoDatabase mongoDatabase = MongoClient.GetDatabase(AppSettings.GetValue("database"));
+            //MongoDBInit.Init(mongoDatabase);
         }
 
     }
