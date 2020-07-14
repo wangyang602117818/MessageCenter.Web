@@ -33,7 +33,9 @@ namespace LogService
             }
             else
             {
-                LogStorage.Logs[key].LogModel.CountPerMinute++;
+                var currentLog = LogStorage.Logs[key].LogModel;
+                currentLog.CountPerMinute++;
+                currentLog.Time = (currentLog.Time + logModel.Time) / 2;
             }
         }
     }
