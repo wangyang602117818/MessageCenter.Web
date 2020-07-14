@@ -52,7 +52,7 @@ namespace MessageCenter.Web.Controllers
         {
             long count = 0;
             var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
-            var includeFields = new List<string>() { "Controller", "Action", "CreateTime", "UserName", "Time", "Exception" };
+            var includeFields = new List<string>() { "Controller", "Action", "CreateTime", "UserName", "Time", "CountPerMinute", "Exception" };
             var result = log.GetPageList(filter, null, includeFields, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson(new JsonWriterSettings() { OutputMode = JsonOutputMode.Strict }).ReplaceStrictJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
         }
