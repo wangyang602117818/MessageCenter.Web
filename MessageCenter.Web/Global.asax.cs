@@ -18,8 +18,11 @@ namespace MessageCenter.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            MsQueue<LogModel> msQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
-            msQueue.CreateQueue();
+            MsQueue<LogModel> logMsQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
+            logMsQueue.CreateQueue();
+
+            MsQueue<LogModel> fileTaskMsQueue = new MsQueue<LogModel>(AppSettings.GetValue("file_msqueue"));
+            fileTaskMsQueue.CreateQueue();
         }
     }
 }
