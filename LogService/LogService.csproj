@@ -92,7 +92,7 @@
       <Version>2.11.1</Version>
     </PackageReference>
     <PackageReference Include="SSO.Util.Client">
-      <Version>2.0.2</Version>
+      <Version>2.0.3</Version>
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>6.7.1</Version>
