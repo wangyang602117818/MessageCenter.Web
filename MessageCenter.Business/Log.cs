@@ -32,17 +32,21 @@ namespace MessageCenter.Business
         {
             return mongoData.GetFromList().Select(s => { s["from"] = s["_id"]; s.Remove("_id"); return s; });
         }
+        public IEnumerable<BsonDocument> GetToList()
+        {
+            return mongoData.GetToList().Select(s => { s["to"] = s["_id"]; s.Remove("_id"); return s; });
+        }
         public IEnumerable<BsonDocument> OpRecordDay(DateTime createTime)
         {
             return mongoData.OpRecordDay(createTime).Select(s => { s["date"] = s["_id"]; s.Remove("_id"); return s; });
         }
-        public IEnumerable<BsonDocument> GetControllersByFrom(string from)
+        public IEnumerable<BsonDocument> GetControllersByFrom(string to)
         {
-            return mongoData.GetControllersByFrom(from).Select(s => { s["controller"] = s["_id"]; s.Remove("_id"); return s; });
+            return mongoData.GetControllersByFrom(to).Select(s => { s["controller"] = s["_id"]; s.Remove("_id"); return s; });
         }
-        public IEnumerable<BsonDocument> GetActionsByController(string from, string controller)
+        public IEnumerable<BsonDocument> GetActionsByController(string to, string controller)
         {
-            return mongoData.GetActionsByController(from, controller).Select(s => { s["action"] = s["_id"]; s.Remove("_id"); return s; });
+            return mongoData.GetActionsByController(to, controller).Select(s => { s["action"] = s["_id"]; s.Remove("_id"); return s; });
         }
         public long GetCountByDate(DateTime? startTime, DateTime? endTime)
         {

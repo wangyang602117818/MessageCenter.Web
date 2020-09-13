@@ -26,7 +26,7 @@ namespace LogService
         }
         public string GetLogKey()
         {
-            string key = LogModel.From + LogModel.Controller + LogModel.Action + LogModel.UserHost + LogModel.CreateTime.ToString("yyyyMMddHHmm");
+            string key = LogModel.To + LogModel.Controller + LogModel.Action + LogModel.UserHost + LogModel.CreateTime.ToString("yyyyMMddHHmm");
             return key.ToLower();
         }
         /// <summary>
@@ -39,7 +39,9 @@ namespace LogService
             var key = logModelTimer.GetLogKey();
             if (LogStorage.Logs.TryRemove(key, out LogModelTimer outLog))
             {
-                new Log().Insert(outLog.LogModel.ToBsonDocument());
+                BsonDocument log = outLog.LogModel.ToBsonDocument();
+                log.Remove("_id");
+                new Log().Insert(log);
                 outLog.timer.Dispose();
             }
         }

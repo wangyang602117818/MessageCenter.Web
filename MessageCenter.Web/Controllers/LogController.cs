@@ -27,16 +27,22 @@ namespace MessageCenter.Web.Controllers
             var result = log.GetFromList().ToJson().ReplaceHttpPrefix();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
-        [OutputCache(Duration = 60 * 60 * 4, VaryByParam = "*")]
-        public ActionResult GetControllersByFrom(string from)
+        [OutputCache(Duration = 60 * 60 * 4)]
+        public ActionResult GetToList()
         {
-            var result = log.GetControllersByFrom(from).ToJson();
+            var result = log.GetToList().ToJson().ReplaceHttpPrefix();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
         [OutputCache(Duration = 60 * 60 * 4, VaryByParam = "*")]
-        public ActionResult GetActionsByController(string from, string controllerName)
+        public ActionResult GetControllersByTo(string to)
         {
-            var result = log.GetActionsByController(from, controllerName).ToJson();
+            var result = log.GetControllersByFrom(to).ToJson();
+            return new ResponseModel<string>(ErrorCode.success, result);
+        }
+        [OutputCache(Duration = 60 * 60 * 4, VaryByParam = "*")]
+        public ActionResult GetActionsByController(string to, string controllerName)
+        {
+            var result = log.GetActionsByController(to, controllerName).ToJson();
             return new ResponseModel<string>(ErrorCode.success, result);
         }
         [HttpPost]
@@ -45,15 +51,6 @@ namespace MessageCenter.Web.Controllers
             long count = 0;
             var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
             var result = log.GetPageList(filter, null, null, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson(new JsonWriterSettings() { OutputMode = JsonOutputMode.Strict }).ReplaceStrictJsonString();
-            return new ResponseModel<string>(ErrorCode.success, result, count);
-        }
-        [HttpPost]
-        public ActionResult GetListSimple(LogListModel logModel)
-        {
-            long count = 0;
-            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
-            var includeFields = new List<string>() { "Controller", "Action", "CreateTime", "UserName", "Time", "CountPerMinute", "Exception" };
-            var result = log.GetPageList(filter, null, includeFields, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson(new JsonWriterSettings() { OutputMode = JsonOutputMode.Strict }).ReplaceStrictJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
         }
         public ActionResult GetById(string id)

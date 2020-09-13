@@ -21,6 +21,15 @@ namespace MessageCenter.Data
                     {"count",new BsonDocument("$sum",1) }
                 }).ToEnumerable();
         }
+        public IEnumerable<BsonDocument> GetToList()
+        {
+            return MongoCollection.Aggregate()
+               .Group<BsonDocument>(new BsonDocument()
+               {
+                    {"_id","$To" },
+                    {"count",new BsonDocument("$sum",1) }
+               }).ToEnumerable();
+        }
         public IEnumerable<BsonDocument> OpRecordDay(DateTime createTime)
         {
             return MongoCollection.Aggregate()
@@ -36,20 +45,20 @@ namespace MessageCenter.Data
                  })
                  .Sort(new BsonDocument("_id", 1)).ToEnumerable();
         }
-        public IEnumerable<BsonDocument> GetControllersByFrom(string from)
+        public IEnumerable<BsonDocument> GetControllersByFrom(string to)
         {
             return MongoCollection.Aggregate()
-                .Match(FilterBuilder.Eq("From", from))
+                .Match(FilterBuilder.Eq("To", to))
                 .Group<BsonDocument>(new BsonDocument()
                 {
                     {"_id","$Controller" },
                     {"count",new BsonDocument("$sum",1) }
                 }).ToEnumerable();
         }
-        public IEnumerable<BsonDocument> GetActionsByController(string from, string controller)
+        public IEnumerable<BsonDocument> GetActionsByController(string to, string controller)
         {
             return MongoCollection.Aggregate()
-                .Match(FilterBuilder.Eq("From", from) & FilterBuilder.Eq("Controller", controller))
+                .Match(FilterBuilder.Eq("To", to) & FilterBuilder.Eq("Controller", controller))
                 .Group<BsonDocument>(new BsonDocument()
                 {
                     {"_id","$Action" },
