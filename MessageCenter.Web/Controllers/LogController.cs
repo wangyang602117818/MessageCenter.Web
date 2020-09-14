@@ -49,7 +49,7 @@ namespace MessageCenter.Web.Controllers
         public ActionResult GetList(LogListModel logModel)
         {
             long count = 0;
-            var filter = log.GetLogFilter(logModel.From, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
+            var filter = log.GetLogFilter(logModel.From, logModel.To, logModel.ControllerName, logModel.ActionName, logModel.StartTime, logModel.EndTime, logModel.UserId, logModel.UserName, logModel.Exception);
             var result = log.GetPageList(filter, null, null, logModel.Sorts, logModel.PageIndex, logModel.PageSize, ref count).ToJson().ReplaceJsonString();
             return new ResponseModel<string>(ErrorCode.success, result, count);
         }

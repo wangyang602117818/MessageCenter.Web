@@ -13,13 +13,21 @@ namespace MessageCenter.Business
     public class Log : ModelBase<Data.Log>
     {
         public Log() : base(new Data.Log()) { }
-        public FilterDefinition<BsonDocument> GetLogFilter(string from, string controller, string action = null, DateTime? startTime = null, DateTime? endTime = null, string userId = null, string userName = null, bool? exception = null)
+        public FilterDefinition<BsonDocument> GetLogFilter(string from, string to, string controller, string action = null, DateTime? startTime = null, DateTime? endTime = null, string userId = null, string userName = null, bool? exception = null)
         {
             FilterDefinition<BsonDocument> filterBuilder = new BsonDocument();
             List<FilterDefinition<BsonDocument>> list = new List<FilterDefinition<BsonDocument>>();
-            if (!from.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("From", new Regex("^" + from + "$", RegexOptions.IgnoreCase)));
-            if (!controller.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("Controller", new Regex("^" + controller + "$", RegexOptions.IgnoreCase)));
-            if (!action.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("Action", new Regex("^" + action + "$", RegexOptions.IgnoreCase)));
+            if (from == "anonymous")
+            {
+                list.Add(FilterBuilder.Eq("From", BsonNull.Value));
+            }
+            else
+            {
+                if (!from.IsNullOrEmpty()) list.Add(FilterBuilder.Eq("From", from));
+            }
+            if (!to.IsNullOrEmpty()) list.Add(FilterBuilder.Eq("To", to));
+            if (!controller.IsNullOrEmpty()) list.Add(FilterBuilder.Eq("Controller", controller));
+            if (!action.IsNullOrEmpty()) list.Add(FilterBuilder.Eq("Action", action));
             if (startTime != null) list.Add(FilterBuilder.Gte("CreateTime", startTime.Value));
             if (endTime != null) list.Add(FilterBuilder.Lte("CreateTime", endTime.Value.AddDays(1)));
             if (!userId.IsNullOrEmpty()) list.Add(FilterBuilder.Regex("UserId", new Regex("^" + userId, RegexOptions.IgnoreCase)));
