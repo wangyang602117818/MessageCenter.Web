@@ -1,4 +1,5 @@
-﻿using SSO.Util.Client;
+﻿using MessageCenter.Web.Models;
+using SSO.Util.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,11 @@ namespace MessageCenter.Web
             MsQueue<LogModel> logMsQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
             logMsQueue.CreateQueue();
 
-            MsQueue<LogModel> fileTaskMsQueue = new MsQueue<LogModel>(AppSettings.GetValue("file_msqueue"));
+            MsQueue<FileConvertModel> fileTaskMsQueue = new MsQueue<FileConvertModel>(AppSettings.GetValue("file_msqueue"));
             fileTaskMsQueue.CreateQueue();
+
+            MsQueue<string> taskSchedulingMsqueue = new MsQueue<string>(AppSettings.GetValue("task_scheduling_msqueue"));
+            taskSchedulingMsqueue.CreateQueue();
         }
     }
 }
