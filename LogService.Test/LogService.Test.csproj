@@ -58,6 +58,10 @@
       <Project>{d638f872-f769-48f5-b801-bd04a58f0b09}</Project>
       <Name>MessageCenter.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MessageCenter.Data\MessageCenter.Data.csproj">
+      <Project>{98dc2f42-91aa-40c5-93fc-49cbb82c3492}</Project>
+      <Name>MessageCenter.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MongoDB.Bson">

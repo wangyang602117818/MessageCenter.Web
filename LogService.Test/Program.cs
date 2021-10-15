@@ -13,9 +13,12 @@ namespace LogService.Test
     {
         static void Main(string[] args)
         {
+            //Log4Net.InfoLog("start...");
+            //new Processor().StartWork();
 
-            Log4Net.InfoLog("start...");
-            new Processor().StartWork();
+            MessageCenter.Data.Log log = new MessageCenter.Data.Log();
+
+            log.Watch();
 
             Console.WriteLine("ok");
             Console.ReadKey();
