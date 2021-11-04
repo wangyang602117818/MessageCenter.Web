@@ -74,12 +74,12 @@ namespace MessageCenter.Data
             if (list.Count == 0) return MongoCollection.EstimatedDocumentCount();
             return MongoCollection.CountDocuments(FilterBuilder.And(list));
         }
-        public void Watch()
+        public void Watch(string collection)
         {
             var bs = new BsonDocument("_data", "82612F5A88000000012B022C0100296E5A10040D21CA985104416DA78D8648D5BFCD8046645F69640064612F5A8810F79F0C39BD77190004");
             var options = new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup, ResumeAfter = bs };
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<BsonDocument>>().Match("{ operationType: { $in: [ 'insert', 'delete','update','replace' ] } }");
-            var cursor = MongoDatabase.GetCollection<BsonDocument>("t01").Watch(pipeline, options);
+            var cursor = MongoDatabase.GetCollection<BsonDocument>(collection).Watch(pipeline, options);
             while (cursor.MoveNext())
             {
                 var doc = cursor.Current;

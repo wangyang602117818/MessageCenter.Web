@@ -18,7 +18,7 @@ namespace LogService.Test
 
             MessageCenter.Data.Log log = new MessageCenter.Data.Log();
 
-            log.Watch();
+            log.Watch("t01");
 
             Console.WriteLine("ok");
             Console.ReadKey();
