@@ -1,0 +1,11 @@
+﻿{
+  "suggest": {
+    "suggest-result": {
+      "prefix": "{prefix}",
+      "completion": {
+        "skip_duplicates": true,
+        "field": "suggest"
+      }
+    }
+  }
+}

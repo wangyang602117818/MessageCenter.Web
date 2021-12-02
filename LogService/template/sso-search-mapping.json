@@ -1,0 +1,46 @@
+﻿{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "rebuilt_keyword": {
+          "tokenizer": "keyword",
+          "filter": [
+            "lowercase"
+          ],
+          "char_filter": [
+            "html_strip"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "copy_to": [ "suggest", "title_keyword" ]
+      },
+      "title_keyword": {
+        "type": "text",
+        "analyzer": "rebuilt_keyword"
+      },
+      "description": {
+        "type": "text",
+        "copy_to": [ "description_keyword" ]
+      },
+      "description_keyword": {
+        "type": "text",
+        "analyzer": "rebuilt_keyword"
+      },
+      "suggest": { "type": "completion" },
+      "doc_time": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd"
+      },
+      "create_time": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss"
+      }
+    }
+  }
+}

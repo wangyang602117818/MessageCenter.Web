@@ -1,0 +1,13 @@
+﻿{
+  "query": {
+    "dis_max": {
+      "queries": [
+        { "wildcard": { "title_keyword": "{keyword}" } },
+        { "wildcard": { "description_keyword": "{keyword}" } }
+      ],
+      "tie_breaker": 0.7
+    }
+  },
+  "from": "{from}",
+  "size": "{size}"
+}

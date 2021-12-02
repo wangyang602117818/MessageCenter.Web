@@ -27,6 +27,9 @@ namespace MessageCenter.Web
 
             MsQueue<string> taskSchedulingMsqueue = new MsQueue<string>(AppSettings.GetValue("task_scheduling_msqueue"));
             taskSchedulingMsqueue.CreateQueue();
+
+            MsQueue<string> searchDataMsqueue = new MsQueue<string>(AppSettings.GetValue("search_data_msqueue"));
+            searchDataMsqueue.CreateQueue(true);
         }
     }
 }

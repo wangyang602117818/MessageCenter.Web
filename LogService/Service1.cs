@@ -1,5 +1,6 @@
 ﻿using MessageCenter.Business;
 using SSO.Util.Client;
+using SSO.Util.Client.ElasticLite;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +25,7 @@ namespace LogService
         {
             Log4Net.InfoLog("start...");
             processor.StartWork();
+
         }
 
         protected override void OnStop()

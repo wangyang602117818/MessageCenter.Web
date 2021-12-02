@@ -54,6 +54,7 @@
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchProcessor.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -67,6 +68,9 @@
     <None Include="App.config" />
     <None Include="install-service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="template\sso-search-mapping.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="uninstall-service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -92,7 +96,7 @@
       <Version>2.11.4</Version>
     </PackageReference>
     <PackageReference Include="SSO.Util.Client">
-      <Version>2.3.5</Version>
+      <Version>2.5.9</Version>
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>6.8.0</Version>

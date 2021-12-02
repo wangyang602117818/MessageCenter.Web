@@ -1,0 +1,18 @@
+﻿{
+  "query": {
+    "multi_match": {
+      "query": "{keyword}",
+      "fields": [
+        "title",
+        "description"
+      ]
+    }
+  },
+  "highlight": {
+    "fields": {
+      "*": {}
+    }
+  },
+  "from": "{from}",
+  "size": "{size}"
+}

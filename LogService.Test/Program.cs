@@ -16,9 +16,10 @@ namespace LogService.Test
             //Log4Net.InfoLog("start...");
             //new Processor().StartWork();
 
-            MessageCenter.Data.Log log = new MessageCenter.Data.Log();
+            new SearchProcessor().StartWork();
 
-            log.Watch("t01");
+            //MessageCenter.Data.Log log = new MessageCenter.Data.Log();
+            //log.Watch("t01");
 
             Console.WriteLine("ok");
             Console.ReadKey();
