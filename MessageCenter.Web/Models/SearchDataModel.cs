@@ -11,6 +11,7 @@ namespace MessageCenter.Web.Models
         [Required]
         public string id { get; set; }
         [Required]
+        public string type { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public DateTime doc_time { get; set; }

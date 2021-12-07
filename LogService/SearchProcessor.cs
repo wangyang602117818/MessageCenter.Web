@@ -24,6 +24,7 @@ namespace LogService
             if (elasticConnection.CheckServerAvailable() && !elasticConnection.Head(indexName))
             {
                 var res = elasticConnection.Put(indexName, mapping);
+                Log4Net.InfoLog("新建index:" + res);
             }
         }
         public void StartWork()
@@ -37,7 +38,16 @@ namespace LogService
         }
         public bool Worker(SearchDataModel searchDataModel)
         {
-            var result = elasticConnection.Post(indexName + "/_doc/" + searchDataModel.id, JsonSerializerHelper.Serialize(searchDataModel));
+            var result = "";
+            if (searchDataModel.type == "delete")
+            {
+                result = elasticConnection.Delete(indexName + "/_doc/" + searchDataModel.id);
+            }
+            else
+            {
+                result = elasticConnection.Post(indexName + "/_doc/" + searchDataModel.id, JsonSerializerHelper.Serialize(searchDataModel));
+            }
+
             if (result.Contains("\"successful\":1")) return true;
             return false;
         }
@@ -47,6 +57,8 @@ namespace LogService
     {
         [JsonIgnore]
         public string id { get; set; }
+        [JsonIgnore]
+        public string type { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public DateTime doc_time { get; set; }
