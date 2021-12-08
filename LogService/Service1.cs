@@ -16,6 +16,7 @@ namespace LogService
     public partial class Service1 : ServiceBase
     {
         protected Processor processor = new Processor();
+        protected SearchProcessor searchProcessor = new SearchProcessor();
         public Service1()
         {
             InitializeComponent();
@@ -25,7 +26,7 @@ namespace LogService
         {
             Log4Net.InfoLog("start...");
             processor.StartWork();
-
+            searchProcessor.StartWork();
         }
 
         protected override void OnStop()
