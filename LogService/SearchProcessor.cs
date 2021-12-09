@@ -55,7 +55,7 @@ namespace LogService
             else
             {
                 result = elasticConnection.Post(indexName + "/_doc/" + searchDataModel.id, JsonSerializerHelper.Serialize(searchDataModel));
-                Log4Net.InfoLog("post:" + result);
+                Log4Net.InfoLog("update:" + result);
             }
             if (result.Contains("\"successful\":1")) return true;
             return false;
