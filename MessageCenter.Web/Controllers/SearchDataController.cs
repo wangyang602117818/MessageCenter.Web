@@ -51,16 +51,17 @@ namespace MessageCenter.Web.Controllers
                 foreach (var item in resp["hits"]["hits"].AsBsonArray)
                 {
                     BsonDocument highlight = item["highlight"].AsBsonDocument;
+                    BsonDocument source = item["_source"].AsBsonDocument;
                     result.Add(new SearchDataModel()
                     {
                         id = item["_id"].AsString,
-                        title = highlight.Contains("title") ? highlight["title"].AsBsonArray.First().ToString() : item["_source"]["title"].ToString(),
-                        description = highlight.Contains("description") ? highlight["description"].AsBsonArray.First().ToString() : item["_source"]["description"].ToString(),
-                        doc_time = DateTime.Parse(item["_source"]["doc_time"].AsString),
-                        create_time = DateTime.Parse(item["_source"]["create_time"].AsString),
+                        title = highlight.Contains("title") ? highlight["title"].AsBsonArray.First().ToString() : source["title"].ToString(),
+                        description = highlight.Contains("description") ? highlight["description"].AsBsonArray.First().ToString() : source.Contains("description") ? source["description"].ToString() : "",
+                        doc_time = DateTime.Parse(source["doc_time"].AsString),
+                        create_time = DateTime.Parse(source["create_time"].AsString),
                     });
                 }
-                return new ResponseModel<List<SearchDataModel>>(ErrorCode.success, result, count);
+                return new ResponseModel<string>(ErrorCode.success, JsonSerializerHelper.Serialize(result), count);
             }
             else
             {
@@ -70,16 +71,17 @@ namespace MessageCenter.Web.Controllers
                 Regex reg = new Regex("(" + word + ")", RegexOptions.IgnoreCase);
                 foreach (var item in respLike["hits"]["hits"].AsBsonArray)
                 {
+                    BsonDocument source = item["_source"].AsBsonDocument;
                     result.Add(new SearchDataModel()
                     {
                         id = item["_id"].AsString,
-                        title = reg.Replace(item["_source"]["title"].ToString(), "<em>$0</em>"),
-                        description = reg.Replace(item["_source"]["description"].ToString(), "<em>$0</em>"),
-                        doc_time = DateTime.Parse(item["_source"]["doc_time"].AsString),
-                        create_time = DateTime.Parse(item["_source"]["create_time"].AsString),
+                        title = reg.Replace(source["title"].ToString(), "<em>$0</em>"),
+                        description = source.Contains("description") ? reg.Replace(source["description"]?.ToString(), "<em>$0</em>") : "",
+                        doc_time = DateTime.Parse(source["doc_time"].AsString),
+                        create_time = DateTime.Parse(source["create_time"].AsString),
                     });
                 }
-                return new ResponseModel<List<SearchDataModel>>(ErrorCode.success, result, count);
+                return new ResponseModel<string>(ErrorCode.success, JsonSerializerHelper.Serialize(result), count);
             }
         }
     }
