@@ -65,7 +65,7 @@
       <Version>0.30.1</Version>
     </PackageReference>
     <PackageReference Include="SSO.Util.Client">
-      <Version>2.6.1</Version>
+      <Version>2.6.2</Version>
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>6.15.0</Version>

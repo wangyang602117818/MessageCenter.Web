@@ -21,10 +21,17 @@ namespace LogService
             esUrl = AppSettings.GetValue("esUrl");
             mapping = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "template\\sso-search-mapping.json");
             ElasticConnection elasticConnection = new ElasticConnection(esUrl);
-            if (elasticConnection.CheckServerAvailable() && !elasticConnection.Head(indexName))
+            try
             {
-                var res = elasticConnection.Put(indexName, mapping);
-                Log4Net.InfoLog("新建index:" + res);
+                if (!elasticConnection.Head(indexName))
+                {
+                    var res = elasticConnection.Put(indexName, mapping);
+                    Log4Net.InfoLog("新建index:" + res);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log4Net.ErrorLog(ex);
             }
         }
         public void StartWork()
@@ -42,12 +49,14 @@ namespace LogService
             if (searchDataModel.type == "delete")
             {
                 result = elasticConnection.Delete(indexName + "/_doc/" + searchDataModel.id);
+                Log4Net.InfoLog("delete:" + result);
+                if (result.Contains("\"found\":false")) return true;
             }
             else
             {
                 result = elasticConnection.Post(indexName + "/_doc/" + searchDataModel.id, JsonSerializerHelper.Serialize(searchDataModel));
+                Log4Net.InfoLog("post:" + result);
             }
-
             if (result.Contains("\"successful\":1")) return true;
             return false;
         }
