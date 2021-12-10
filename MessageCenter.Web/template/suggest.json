@@ -1,4 +1,5 @@
 ﻿{
+  "_source": "suggest",
   "suggest": {
     "suggest-result": {
       "prefix": "{prefix}",
