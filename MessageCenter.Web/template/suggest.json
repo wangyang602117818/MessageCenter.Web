@@ -5,6 +5,7 @@
       "prefix": "{prefix}",
       "completion": {
         "skip_duplicates": true,
+        "size": 10,
         "field": "suggest"
       }
     }
