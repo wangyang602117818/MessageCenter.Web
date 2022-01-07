@@ -23,7 +23,7 @@ namespace MessageCenter.Web.Controllers
         public ActionResult Insert(SearchDataModel searchDataModel)
         {
             searchDataMsqueue.SendMessageTransactional(searchDataModel, "search", true);
-            return new ResponseModel<string>(ErrorCode.success, "");
+            return new ResponseModel<string>(ErrorCode.success, searchDataModel.id);
         }
         public ActionResult Suggest(string word)
         {
