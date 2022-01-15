@@ -75,8 +75,10 @@ namespace MessageCenter.Web.Controllers
             var now = DateTime.UtcNow;
             long lastDay = log.GetCountByDate(now.AddDays(-1).Date, now.Date);
             //上月操作数
-            var lastMonthStart = new DateTime(now.Year, now.Month - 1, 1, 0, 0, 0);
-            var lastMonthEnd = new DateTime(now.Year, now.Month, 1, 0, 0, 0);
+            DateTime lastmonth = DateTime.Now.AddMonths(-1);
+            var lastMonthStart = new DateTime(lastmonth.Year, lastmonth.Month, 1, 0, 0, 0); //上月1号
+            var lastMonthEnd = new DateTime(now.Year, now.Month, 1, 0, 0, 0);  //本月1号
+
             long lastMonth = log.GetCountByDate(lastMonthStart, lastMonthEnd);
             //总操作数
             long all = log.GetCountByDate(null, null);
