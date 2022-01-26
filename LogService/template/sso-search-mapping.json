@@ -16,6 +16,14 @@
   },
   "mappings": {
     "properties": {
+      "database": {
+        "type": "text",
+        "analyzer": "rebuilt_keyword"
+      },
+      "table": {
+        "type": "text",
+        "analyzer": "rebuilt_keyword"
+      },
       "title": {
         "type": "text",
         "copy_to": [ "suggest", "title_keyword" ]

@@ -39,7 +39,7 @@ namespace MessageCenter.Web.Controllers
                 return new ResponseModel<string>(ErrorCode.success, "[]");
             }
         }
-        public ActionResult Search(string word, int pageIndex = 1, int pageSize = 10)
+        public ActionResult Search(string word, bool highlight = false, int pageIndex = 1, int pageSize = 10)
         {
             int from = (pageIndex - 1) * pageSize;
             string searchJson = search.Replace("{keyword}", word).Replace("{from}", from.ToString()).Replace("{size}", pageSize.ToString());
@@ -50,13 +50,13 @@ namespace MessageCenter.Web.Controllers
             {
                 foreach (var item in resp["hits"]["hits"].AsBsonArray)
                 {
-                    BsonDocument highlight = item["highlight"].AsBsonDocument;
+                    BsonDocument hl = item["highlight"].AsBsonDocument;
                     BsonDocument source = item["_source"].AsBsonDocument;
                     result.Add(new SearchDataModel()
                     {
                         id = item["_id"].AsString,
-                        title = highlight.Contains("title") ? highlight["title"].AsBsonArray.First().ToString() : source["title"].ToString(),
-                        description = highlight.Contains("description") ? highlight["description"].AsBsonArray.First().ToString() : source.Contains("description") ? source["description"].ToString() : "",
+                        title = (hl.Contains("title") && highlight) ? hl["title"].AsBsonArray.First().ToString() : source["title"].ToString(),
+                        description = (hl.Contains("description") && highlight) ? hl["description"].AsBsonArray.First().ToString() : source.Contains("description") ? source["description"].ToString() : "",
                         doc_time = DateTime.Parse(source["doc_time"].AsString),
                         create_time = DateTime.Parse(source["create_time"].AsString),
                     });
@@ -75,8 +75,8 @@ namespace MessageCenter.Web.Controllers
                     result.Add(new SearchDataModel()
                     {
                         id = item["_id"].AsString,
-                        title = reg.Replace(source["title"].ToString(), "<em>$0</em>"),
-                        description = source.Contains("description") ? reg.Replace(source["description"]?.ToString(), "<em>$0</em>") : "",
+                        title = highlight ? reg.Replace(source["title"].ToString(), "<em>$0</em>") : source["title"].ToString(),
+                        description = source.Contains("description") ? (highlight ? reg.Replace(source["description"]?.ToString(), "<em>$0</em>") : source["description"]?.ToString()) : "",
                         doc_time = DateTime.Parse(source["doc_time"].AsString),
                         create_time = DateTime.Parse(source["create_time"].AsString),
                     });
