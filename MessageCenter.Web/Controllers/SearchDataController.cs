@@ -52,9 +52,12 @@ namespace MessageCenter.Web.Controllers
                 {
                     BsonDocument hl = item["highlight"].AsBsonDocument;
                     BsonDocument source = item["_source"].AsBsonDocument;
+                    DataBaseType dataBase = (DataBaseType)Enum.Parse(typeof(DataBaseType), source["database"].AsString);
                     result.Add(new SearchDataModel()
                     {
-                        id = item["_id"].AsString,
+                        database = dataBase,
+                        table = source["table"].AsString,
+                        key = source["key"].AsString,
                         title = (hl.Contains("title") && highlight) ? hl["title"].AsBsonArray.First().ToString() : source["title"].ToString(),
                         description = (hl.Contains("description") && highlight) ? hl["description"].AsBsonArray.First().ToString() : source.Contains("description") ? source["description"].ToString() : "",
                         doc_time = DateTime.Parse(source["doc_time"].AsString),
@@ -72,9 +75,12 @@ namespace MessageCenter.Web.Controllers
                 foreach (var item in respLike["hits"]["hits"].AsBsonArray)
                 {
                     BsonDocument source = item["_source"].AsBsonDocument;
+                    DataBaseType dataBase = (DataBaseType)Enum.Parse(typeof(DataBaseType), source["database"].AsString);
                     result.Add(new SearchDataModel()
                     {
-                        id = item["_id"].AsString,
+                        database = dataBase,
+                        table = source["table"].AsString,
+                        key = source["key"].AsString,
                         title = highlight ? reg.Replace(source["title"].ToString(), "<em>$0</em>") : source["title"].ToString(),
                         description = source.Contains("description") ? (highlight ? reg.Replace(source["description"]?.ToString(), "<em>$0</em>") : source["description"]?.ToString()) : "",
                         doc_time = DateTime.Parse(source["doc_time"].AsString),

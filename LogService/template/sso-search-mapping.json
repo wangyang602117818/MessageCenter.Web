@@ -24,6 +24,10 @@
         "type": "text",
         "analyzer": "rebuilt_keyword"
       },
+      "key": {
+        "type": "text",
+        "analyzer": "rebuilt_keyword"
+      },
       "title": {
         "type": "text",
         "copy_to": [ "suggest", "title_keyword" ]

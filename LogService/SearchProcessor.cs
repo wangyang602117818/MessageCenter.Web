@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SSO.Util.Client;
 using SSO.Util.Client.ElasticLite;
 using System;
@@ -46,15 +47,15 @@ namespace LogService
         public bool Worker(SearchDataModel searchDataModel)
         {
             var result = "";
-            if (searchDataModel.type == "delete")
+            if (searchDataModel.operationType == OperationType.delete)
             {
-                result = elasticConnection.Delete(indexName + "/_doc/" + searchDataModel.id);
+                result = elasticConnection.Delete(indexName + "/_doc/" + searchDataModel.Id);
                 Log4Net.InfoLog("delete:" + result);
                 if (result.Contains("\"found\":false")) return true;
             }
             else
             {
-                result = elasticConnection.Post(indexName + "/_doc/" + searchDataModel.id, JsonSerializerHelper.Serialize(searchDataModel));
+                result = elasticConnection.Post(indexName + "/_doc/" + searchDataModel.Id, JsonSerializerHelper.Serialize(searchDataModel));
                 Log4Net.InfoLog("update:" + result);
             }
             if (result.Contains("\"successful\":1")) return true;
@@ -64,13 +65,18 @@ namespace LogService
 
     public class SearchDataModel
     {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DataBaseType database { get; set; }
+        public string table { get; set; }
+        public string key { get; set; }
         [JsonIgnore]
-        public string id { get; set; }
-        [JsonIgnore]
-        public string type { get; set; }
+        public OperationType operationType { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public DateTime doc_time { get; set; }
         public DateTime create_time { get; set; }
+
+        [JsonIgnore]
+        public string Id { get { return (database + table + key).ToLower().ToMD5(); } }
     }
 }
