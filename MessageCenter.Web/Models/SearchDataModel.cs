@@ -9,11 +9,16 @@ namespace MessageCenter.Web.Models
     public class SearchDataModel
     {
         [Required]
-        public string id { get; set; }
+        public string database { get; set; }
         [Required]
-        public string type { get; set; }
+        public string table { get; set; }
+        [Required]
+        public string key { get; set; }
+        [Required]
+        public string operationType { get; set; }
         public string title { get; set; }
         public string description { get; set; }
+        public string extra { get; set; }
         public DateTime doc_time { get; set; }
         public DateTime create_time = DateTime.Now;
     }
