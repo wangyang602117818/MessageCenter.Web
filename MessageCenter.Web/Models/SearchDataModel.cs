@@ -1,4 +1,6 @@
-﻿using SSO.Util.Client;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SSO.Util.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +11,7 @@ namespace MessageCenter.Web.Models
 {
     public class SearchDataModel
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         [Required]
         public DataBaseType database { get; set; }
         [Required]
