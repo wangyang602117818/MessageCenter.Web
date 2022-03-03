@@ -1,16 +1,24 @@
 ﻿{
   "query": {
-    "multi_match": {
-      "query": "{keyword}",
-      "fields": [
-        "title",
-        "description"
-      ]
+    "bool": {
+      "must": [
+        {
+          "multi_match": {
+            "query": "{keyword}",
+            "fields": [
+              "title",
+              "description"
+            ]
+          }
+        }
+      ],
+      "filter": 100
     }
   },
   "highlight": {
     "fields": {
-      "*": {}
+      "title": {},
+      "description": {}
     }
   },
   "from": "{from}",

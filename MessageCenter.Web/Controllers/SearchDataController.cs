@@ -25,25 +25,36 @@ namespace MessageCenter.Web.Controllers
             searchDataMsqueue.SendMessageTransactional(searchDataModel, "search", true);
             return new ResponseModel<string>(ErrorCode.success, searchDataModel.id);
         }
-        public ActionResult Suggest(string word)
+        public ActionResult Suggest(string word, string database = "", string table = "")
         {
-            string searchJson = suggest.Replace("{prefix}", word);
-            var result = BsonDocument.Parse(elasticConnection.Post("sso-home-search/_doc/_search?filter_path=suggest.suggest-result.options.text,suggest.suggest-result.options._id", searchJson));
+            string suggestJson = suggest.Replace("{prefix}", word);
+            var result = BsonDocument.Parse(elasticConnection.Post("sso-home-search/_search?filter_path=suggest.suggest-result.options.text,suggest.suggest-result.options._id,suggest.suggest-result.options._source", suggestJson));
             if (result.Contains("suggest"))
             {
-                var resp = result["suggest"]["suggest-result"].AsBsonArray.First()["options"].AsBsonArray.ToJson();
-                return new ResponseModel<string>(ErrorCode.success, resp);
+                var datas = result["suggest"]["suggest-result"].AsBsonArray.First()["options"].AsBsonArray;
+                var predicate = new Func<BsonValue, bool>((doc) =>
+                {
+                    BsonDocument source = doc["_source"].AsBsonDocument;
+                    if (!database.IsNullOrEmpty() && source["database"].AsString.ToLower() != database.ToLower()) return false;
+                    if (!table.IsNullOrEmpty() && source["table"].AsString.ToLower() != table.ToLower()) return false;
+                    return true;
+                });
+                return new ResponseModel<string>(ErrorCode.success, datas.Where(predicate).ToJson());
             }
             else
             {
                 return new ResponseModel<string>(ErrorCode.success, "[]");
             }
         }
-        public ActionResult Search(string word, bool highlight = false, int pageIndex = 1, int pageSize = 10)
+        public ActionResult Search(string word, bool highlight = false, string database = "", string table = "", int pageIndex = 1, int pageSize = 10)
         {
             int from = (pageIndex - 1) * pageSize;
-            string searchJson = search.Replace("{keyword}", word).Replace("{from}", from.ToString()).Replace("{size}", pageSize.ToString());
-            var resp = BsonDocument.Parse(elasticConnection.Post("sso-home-search/_doc/_search", searchJson));
+            string searchJson = search;
+            BsonArray filters = new BsonArray();
+            if (!database.IsNullOrEmpty()) filters.Add(new BsonDocument("term", new BsonDocument("database", database.ToLower())));
+            if (!table.IsNullOrEmpty()) filters.Add(new BsonDocument("term", new BsonDocument("table", table.ToLower())));
+            searchJson = searchJson.Replace("100", filters.ToJson()).Replace("{keyword}", word).Replace("{from}", from.ToString()).Replace("{size}", pageSize.ToString());
+            var resp = BsonDocument.Parse(elasticConnection.Post("sso-home-search/_search", searchJson));
             int count = Convert.ToInt32(resp["hits"]["total"]["value"].ToString());
             List<SearchDataModel> result = new List<SearchDataModel>();
             if (count > 0)
@@ -68,8 +79,8 @@ namespace MessageCenter.Web.Controllers
             }
             else
             {
-                string searchLikeJson = searchLike.Replace("{keyword}", "*" + word + "*").Replace("{from}", from.ToString()).Replace("{size}", pageSize.ToString());
-                var respLike = BsonDocument.Parse(elasticConnection.Post("sso-home-search/_doc/_search", searchLikeJson));
+                string searchLikeJson = searchLike.Replace("100", filters.ToJson()).Replace("{keyword}", word).Replace("{from}", from.ToString()).Replace("{size}", pageSize.ToString());
+                var respLike = BsonDocument.Parse(elasticConnection.Post("sso-home-search/_search", searchLikeJson));
                 count = Convert.ToInt32(respLike["hits"]["total"]["value"].ToString());
                 Regex reg = new Regex("(" + word + ")", RegexOptions.IgnoreCase);
                 foreach (var item in respLike["hits"]["hits"].AsBsonArray)

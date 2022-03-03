@@ -1,11 +1,11 @@
 ﻿{
-  "_source": "suggest",
+  "_source": ["database","table"],
   "suggest": {
     "suggest-result": {
       "prefix": "{prefix}",
       "completion": {
         "skip_duplicates": true,
-        "size": 10,
+        "size": 15,
         "field": "suggest"
       }
     }
