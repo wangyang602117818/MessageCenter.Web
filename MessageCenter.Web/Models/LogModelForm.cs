@@ -23,7 +23,6 @@ namespace MessageCenter.Web.Models
         public string UserHost { get; set; }
         [Required]
         public string UserAgent { get; set; }
-        [Required]
         public long Time { get; set; }
         public int CountPerMinute { get; set; }
         public bool Exception { get; set; }
