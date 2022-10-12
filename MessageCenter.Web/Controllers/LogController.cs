@@ -1,4 +1,5 @@
 ﻿using MessageCenter.Business;
+using MessageCenter.Web.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
@@ -16,8 +17,27 @@ namespace MessageCenter.Web.Controllers
     {
         protected MsQueue<LogModel> logMsQueue = new MsQueue<LogModel>(AppSettings.GetValue("log_msqueue"));
         protected Log log = new Log();
-        public ActionResult Insert(LogModel logModel)
+        public ActionResult Insert(LogModelForm logModelForm)
         {
+            LogModel logModel = new LogModel()
+            {
+                From = logModelForm.From,
+                To = logModelForm.To,
+                Controller = logModelForm.Controller,
+                Action = logModelForm.Action,
+                Route = logModelForm.Route,
+                QueryString = logModelForm.QueryString,
+                Content = logModelForm.Content,
+                Response = logModelForm.Response,
+                UserId = logModelForm.UserId,
+                UserName = logModelForm.UserName,
+                UserHost = logModelForm.UserHost,
+                UserAgent = logModelForm.UserAgent,
+                Time = logModelForm.Time,
+                CountPerMinute = logModelForm.CountPerMinute,
+                Exception = logModelForm.Exception,
+                CreateTime = DateTime.Now
+            };
             logMsQueue.SendMessage(logModel, "log");
             return new ResponseModel<string>(ErrorCode.success, "");
         }
