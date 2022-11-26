@@ -39,7 +39,7 @@ namespace MessageCenter.Web.Controllers
                     if (!table.IsNullOrEmpty() && source["table"].AsString.ToLower() != table.ToLower()) return false;
                     return true;
                 });
-                return new ResponseModel<string>(ErrorCode.success, datas.Where(predicate).ToJson());
+                return new ResponseModel<string>(ErrorCode.success, datas.Where(predicate).ToJson().Replace("_id", "id"));
             }
             else
             {
